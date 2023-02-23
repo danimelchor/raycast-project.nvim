@@ -27,7 +27,7 @@ const getCachedEnv = async () => {
 
 export default function Command() {
   const [searchText, setSearchText] = useState("");
-  const { isLoading, data } = usePromise(
+  const { isLoading, data, revalidate } = usePromise(
     async (query) => {
       // Read file
       let data = "";
@@ -68,7 +68,7 @@ export default function Command() {
     >
       <List.Section title="Results" subtitle={data?.length + ""}>
         {data?.map((searchResult: SearchResult) => (
-          <SearchListItem key={searchResult.project_name} searchResult={searchResult} />
+          <SearchListItem key={searchResult.project_name} searchResult={searchResult} revalidate={revalidate} />
         ))}
       </List.Section>
     </List>
@@ -80,13 +80,14 @@ async function openInEditor(path: string) {
   exec(`${terminal} ${args} nvim "${path}"`, execEnv);
 }
 
-async function deleteProject(path: string) {
+async function deleteProject(path: string, cb: () => void) {
   const file_data = await fs.promises.readFile(untildify(projectsPath), "utf8")
   const new_data = file_data.split("\n").filter((line: string) => line !== path).join("\n")
   await fs.promises.writeFile(untildify(projectsPath), new_data)
+  cb()
 }
 
-function SearchListItem({ searchResult }: { searchResult: SearchResult }) {
+function SearchListItem({ searchResult, revalidate }: { searchResult: SearchResult, revalidate: () => void }) {
   const { project_name, full_path } = searchResult;
   const prettyPath = tildify(searchResult.full_path);
 
@@ -110,7 +111,7 @@ function SearchListItem({ searchResult }: { searchResult: SearchResult }) {
             <Action
               title={`Delete ${project_name} project`}
               icon="trash.png"
-              onAction={() => deleteProject(full_path)}
+              onAction={() => deleteProject(full_path, revalidate)}
               shortcut={{ modifiers: ["cmd"], key: "d" }}
             />
           </ActionPanel.Section>

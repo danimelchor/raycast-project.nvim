@@ -12,7 +12,7 @@
   "commands": [
     {
       "name": "index",
-      "title": "nvim",
+      "title": "Search Recent Projects",
       "description": "Search your recent projects and open them in Neovim using the terminal of your choice",
       "mode": "view"
     }

@@ -17,9 +17,38 @@
       "mode": "view"
     }
   ],
+  "preferences": [
+    {
+      "name": "terminal",
+      "type": "textfield",
+      "required": false,
+      "title": "Terminal App",
+      "default": "kitty",
+      "description": "Choose what terminal to open neovim with" 
+    },
+    {
+      "name": "args",
+      "type": "textfield",
+      "required": false,
+      "title": "Command arguments",
+      "default": "--start-as=maximized -o hide_window_decorations=yes",
+      "description": "Choose what arguments to execute the terminal app with" 
+    },
+    {
+      "name": "projectsPath",
+      "type": "textfield",
+      "required": false,
+      "title": "Nvim projects file path",
+      "default": "~/.local/share/nvim/project_nvim/project_history",
+      "description": "Choose where your nvim projects file is located"
+    }
+  ],
   "dependencies": {
     "@raycast/api": "^1.48.0",
-    "@raycast/utils": "^1.4.8"
+    "@raycast/utils": "^1.4.8",
+    "shell-env": "^4.0.1",
+    "tildify": "^3.0.0",
+    "untildify": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "18.8.3",
